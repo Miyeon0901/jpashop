@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberRepository {
 
-    @Autowired // spring data jpa를 쓰면 PersistenceContext 대신 Autowired 사용 가능
+//    @Autowired // spring data jpa를 쓰면 PersistenceContext 대신 Autowired 사용 가능.
 //    @PersistenceContext // 스프링이 생성한 jpa entity manager를 주입해줌..?
     private final EntityManager em;
 
