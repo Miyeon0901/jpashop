@@ -17,19 +17,59 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne // 상대방에는 @OneToMany
+    @ManyToOne(fetch = FetchType.LAZY) // 상대방에는 @OneToMany
     @JoinColumn(name = "member_id") // 외래키. JPA에서 외래키는 연관 관계의 주인만 update
     private Member member;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) // cascade는 persist를 전파
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne
+    /*
+    persist(orderItemA)
+    persist(orderItemB)
+    persist(orderItemC)
+    persist(order)
+
+    cascade를 쓰면 위 네줄이 아래 한줄로 줄여짐.
+    persist(order)
+    */
+
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // order 저장할때 delivery도 함께 persist
     @JoinColumn(name = "delivery_id")// 일대일 관계에서 연관관계 주인(외래키를 가짐)은 access가 많이 이뤄지는 테이블
     private Delivery delivery;
 
+    // 컬럼명이 order_date가 됨. SpringPhysicalNamingStrategy
     private LocalDateTime orderDate; // 주문시간. LocalDateTime을 쓰면 hibernate가 알아서 지원을 해줌.
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status; // 주문상태 [ORDER, CANCEL]
+
+    // == 연관관계 (편의) 메서드 == // -- 양방향일 때 핵심적으로 컨트롤 하는 엔티티 쪽에 넣어주는 것이 좋음.
+    public void setMember(Member member) {
+        this.member = member;
+        member.getOrders().add(this);
+    }
+
+    /*
+    public static void main(String[] args) {
+        Member member = new Member();
+        Order order = new Order();
+
+        member.getOrders().add(order);
+        order.setMember(member);
+        // 위 두줄을 쓸 필요 없게 연관관계 편의 메서드를 만듦.
+        // order.setMember(member); 만 작성하면 됨.
+    }
+    */
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
+        delivery.setOrder(this);
+    }
 }
