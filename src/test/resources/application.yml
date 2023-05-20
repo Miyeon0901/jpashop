@@ -1,0 +1,20 @@
+spring:
+#  spring boot가 별다른 설정이 없으면 memory 모드로 돌려버림. 아래꺼 다 안써도돼!
+#  datasource:
+#    url: jdbc:h2:mem:test # test할 때 in memory db 씀. h2 db를 따로 띄우지 않아도 테스트 가능.
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create #내가 가진 엔티티 정보를 지우고 다시 생성함
+#    properties:
+#      hibernate:
+##        show_sql: true #System.out에 찍음
+#        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug  #로거를 통해서 찍음
+    org.hibernate.type: trace #로그 남길때 파라미터 값을 알려줌
