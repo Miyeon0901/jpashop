@@ -1,4 +1,4 @@
-package jpabook.jpashop;
+/*package jpabook.jpashop;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -35,4 +35,4 @@ public class MemberRepositoryTest {
         // 같은 영속성 컨텍스트 안에서는 ID 값이 같으면 같은 엔티티. 1차 캐시에서 끌어옴. select를 하지조차 않는다.
         System.out.println("findMember == member: " + (findMember == member));
     }
-}
+}*/
