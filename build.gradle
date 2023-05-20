@@ -20,7 +20,8 @@ dependencies { // 기본적으로 자기랑 맞는 버전을 세팅해놓음. �
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web' // 내장 tomcat과 webmvc 사용 가능
 	implementation 'org.springframework.boot:spring-boot-devtools'
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6' // 파라미터를 채워주는 외부 라이브러리. 운영 단계 사용은 성능 테스트 필수!
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
+    testImplementation 'org.testng:testng:7.1.0'// 파라미터를 채워주는 외부 라이브러리. 운영 단계 사용은 성능 테스트 필수!
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'

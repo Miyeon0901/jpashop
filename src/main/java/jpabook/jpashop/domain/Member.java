@@ -22,4 +22,5 @@ public class Member {
 
     @OneToMany(mappedBy = "member") // 나는 거울일 뿐이야
     private List<Order> orders = new ArrayList<>(); // 바로 초기화 하는 것이 안전.
+
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
-@Getter //@Setter // Setter 사용하지 않고 비즈니스 메서드 쓸것
+@Getter @Setter // Setter 사용하지 않고 비즈니스 메서드 쓸것
 public abstract class Item {
 
     @Id @GeneratedValue
