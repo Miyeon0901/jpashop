@@ -18,7 +18,7 @@ public class ItemRepository {
         if (item.getId() == null) { // id값이 없다는 것은 완전히 새로 생성한 객체임을 의미.
             em.persist(item);
         } else {
-            em.merge(item); // update라고 이해.
+            em.merge(item); // update라고 이해. 영속성 컨텍스트가 반환됨.
         }
     }
 

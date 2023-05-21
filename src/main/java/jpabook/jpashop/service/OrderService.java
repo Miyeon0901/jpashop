@@ -56,7 +56,7 @@ public class OrderService {
         // 주문 엔티티 조회
         Order order = orderRepository.findOne(orderId);
         // 주문 취소
-        order.cancel();
+        order.cancel(); // 별도로 update를 하지 않는데도 저장됨. 변경 감지!
     }
 
     /**
