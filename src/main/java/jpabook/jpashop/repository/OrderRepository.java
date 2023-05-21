@@ -59,7 +59,7 @@ public class OrderRepository {
             query = query.setParameter("status", orderSearch.getOrderStatus());
         }
         if (StringUtils.hasText(orderSearch.getMemberName())) {
-            query = query.setParameter("name", orderSearch.getMemberName());
+            query = query.setParameter("name", "%" + orderSearch.getMemberName() + "%");
         }
         return query.getResultList();
     }

@@ -5,6 +5,7 @@ import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.ItemRepository;
 import jpabook.jpashop.repository.MemberRepository;
 import jpabook.jpashop.repository.OrderRepository;
+import jpabook.jpashop.repository.OrderSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,7 @@ public class OrderService {
     @Transactional
     public Long order(Long memberId, Long itemId, int count) {
 
-        // 엔티티 조회
+        // 엔티티 조회: Controller 말고 Service에서 엔티티 조회를 해야 영속성도 유지가 되서 편리함.
         Member member = memberRepository.findOne(memberId);
         Item item = itemRepository.findOne(itemId);
 
@@ -62,8 +63,8 @@ public class OrderService {
     /**
      * 검색
      */
-    /*
     public List<Order> findOrders(OrderSearch orderSearch){
-        return orderRepository.findAll(orderSearch);
-    }*/
+        // 단순하게 위임만 함. 이런경우 Controller에서 repository 바로 불러도 상관 없음.
+        return orderRepository.findAllByString(orderSearch);
+    }
 }
