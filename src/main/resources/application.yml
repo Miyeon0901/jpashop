@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create #내가 가진 엔티티 정보를 지우고 다시 생성함
+      ddl-auto: none #create #내가 가진 엔티티 정보를 지우고 다시 생성함
     properties:
       hibernate:
 #        show_sql: true #System.out에 찍음
