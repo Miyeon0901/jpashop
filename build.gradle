@@ -30,6 +30,7 @@ dependencies { // 기본적으로 자기랑 맞는 버전을 세팅해놓음. �
 	testImplementation("org.junit.vintage:junit-vintage-engine") {
 		exclude group: "org.hamcrest", module: "hamcrest-core"
 	}
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
 }
 test {
 	useJUnitPlatform()

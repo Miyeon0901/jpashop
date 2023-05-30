@@ -20,9 +20,11 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY) // 상대방에는 @OneToMany
+    @ManyToOne(fetch = FetchType.LAZY) // 상대방에는 @OneToMany.
     @JoinColumn(name = "member_id") // 외래키. JPA에서 외래키는 연관 관계의 주인만 update
-    private Member member;
+    private Member member; // = new ByteBuddyInterceptor(); 지연로딩이므로 proxy 객체를 가져옴. bytebuddy
+    // Hibernate5Module을 쓰면 제외하고 order만 가져와줌. orderItems: null, delivery: null
+    // Configure FORCE_LAZY_LOADING 으로 강제로 가져올 수 있음. -> 성능상 문제가 생김.
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) // cascade는 persist를 전파
     private List<OrderItem> orderItems = new ArrayList<>();

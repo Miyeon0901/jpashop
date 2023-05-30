@@ -23,6 +23,7 @@ public class Member {
     private Address address;
 
 //    @JsonIgnore // api에서 조회할때 제외됨. 다양한 case가 있으므로 entity 안에서 이런거(presentation 계층에 대한 로직) 사용하지 말자.
+    @JsonIgnore // 양방향 연관관계에서 한쪽을 JsonIgnore 해줘야함.
     @OneToMany(mappedBy = "member") // 나는 거울일 뿐이야
     private List<Order> orders = new ArrayList<>(); // 바로 초기화 하는 것이 안전.
 
