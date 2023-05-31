@@ -103,6 +103,19 @@ public class OrderRepository {
                 .getResultList();
     }
 
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                "select distinct o from Order o" + // distinct 넣으면 뻥튀기 안시킴. db쿼리의 결과는 같으나 JPA 에서 id 값이 같으면 중복을 제거해줌.
+                    " join fetch o.member m" +
+                    " join fetch o.delivery d" +
+                    " join fetch o.orderItems oi" + // order 가 orderItem 개수만큼 뻥튀기됨. JPA 에서 가져올 데이터가 배가 되는 꼴. 주소값까지 똑같은 객체가 여러개 생김.
+                    " join fetch oi.item i", Order.class)
+                // firstResult/maxResults specified with collection fetch; applying in memory!
+                // 모든 데이터를 메모리에 올린 뒤 페이징 처리 -> out of memory
+//                .setFirstResult(1)
+//                .setMaxResults(100)
+                .getResultList();
+    }
 
 
     /**
