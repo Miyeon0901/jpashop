@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class Order {
     // Hibernate5Module을 쓰면 제외하고 order만 가져와줌. orderItems: null, delivery: null
     // Configure FORCE_LAZY_LOADING 으로 강제로 가져올 수 있음. -> 성능상 문제가 생김.
 
+//    @BatchSize(size = 1000) // detail 하게 적용, collection 에 적용.
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) // cascade는 persist를 전파
     private List<OrderItem> orderItems = new ArrayList<>();
 

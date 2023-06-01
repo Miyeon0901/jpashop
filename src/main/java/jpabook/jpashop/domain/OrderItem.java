@@ -18,7 +18,7 @@ public class OrderItem {
     @Column(name = "order_item_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // ToOne 관계는 One 측에다 @BatchSize
     @JoinColumn(name = "item_id")
     private Item item;
 

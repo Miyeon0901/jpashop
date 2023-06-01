@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -114,6 +115,17 @@ public class OrderRepository {
                 // 모든 데이터를 메모리에 올린 뒤 페이징 처리 -> out of memory
 //                .setFirstResult(1)
 //                .setMaxResults(100)
+                .getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+
+        return em.createQuery(
+                        "select o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
                 .getResultList();
     }
 

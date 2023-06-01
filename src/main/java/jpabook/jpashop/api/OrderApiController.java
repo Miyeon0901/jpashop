@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -50,10 +51,21 @@ public class OrderApiController {
 
     @GetMapping("/api/v3/orders")
     public List<OrderDto> ordersV3() {
+        // 중복 데이터가 너무 많음. DB에서 application으로 전송되는 데이터 용량이 많아짐.
         return  orderRepository.findAllWithItem().stream()
                 .map(OrderDto::new)
                 .collect(Collectors.toList());
     }
+
+    @GetMapping("/api/v3.1/orders")
+    public List<OrderDto> ordersV3_page(@RequestParam(value = "offset", defaultValue = "0") int offset,
+                                        @RequestParam(value = "limit", defaultValue = "100") int limit) {
+        // 쿼리는 더 많이 나가지만 정규화된 상태로 중복 데이터가 없음.
+        return  orderRepository.findAllWithMemberDelivery(offset, limit).stream()
+                .map(OrderDto::new)
+                .collect(Collectors.toList());
+    }
+
 
     @Getter
     static class OrderDto {
