@@ -65,6 +65,6 @@ public class OrderService {
      */
     public List<Order> findOrders(OrderSearch orderSearch){
         // 단순하게 위임만 함. 이런경우 Controller에서 repository 바로 불러도 상관 없음.
-        return orderRepository.findAllByString(orderSearch);
+        return orderRepository.findAll(orderSearch);
     }
 }
