@@ -59,13 +59,13 @@ public class MemberService {
 
 //    @Transactional(readOnly = true)
     public Member findOne(Long memberId) {
-        return memberRepository.findOne(memberId);
+        return memberRepository.findById(memberId).get(); //findOne(memberId);
     }
 
 
     @Transactional
     public void update(Long id, String name) { // 변경감지를 이용
-        Member member = memberRepository.findOne(id);
+        Member member = memberRepository.findById(id).get();
         member.setName(name);
     }
 }
