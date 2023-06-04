@@ -10,6 +10,8 @@ import jpabook.jpashop.repository.order.query.OrderFlatDto;
 import jpabook.jpashop.repository.order.query.OrderItemQueryDto;
 import jpabook.jpashop.repository.order.query.OrderQueryDto;
 import jpabook.jpashop.repository.order.query.OrderQueryRepository;
+import jpabook.jpashop.service.query.OrderDto;
+import jpabook.jpashop.service.query.OrderQueryService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,7 @@ public class OrderApiController {
 
     private final OrderRepository orderRepository;
     private final OrderQueryRepository orderQueryRepository;
+    private final OrderQueryService orderQueryService;
 
     /**
      * V1. 엔티티 직접 노출
@@ -35,40 +38,45 @@ public class OrderApiController {
      */
     @GetMapping("/api/v1/orders")
     public List<Order> ordersV1() {
-        List<Order> all = orderRepository.findAllByString(new OrderSearch());
-
-        for (Order order : all) {
-            order.getMember().getName(); // LAZY 강제 초기화
-            order.getDelivery().getAddress(); // LAZY 강제 초기화
-
-            List<OrderItem> orderItems = order.getOrderItems();
-            orderItems.stream().forEach(o -> o.getItem().getName()); // LAZY 강제 초기화
-        }
-        return all;
+        return orderQueryService.ordersV1();
+//        List<Order> all = orderRepository.findAllByString(new OrderSearch());
+//
+//        for (Order order : all) {
+//            order.getMember().getName(); // LAZY 강제 초기화. Order.getMember() -> 아직은 proxy
+//            order.getDelivery().getAddress(); // LAZY 강제 초기화
+//
+//            List<OrderItem> orderItems = order.getOrderItems();
+//            orderItems.stream().forEach(o -> o.getItem().getName()); // LAZY 강제 초기화
+//        }
+//        return all;
     }
 
     @GetMapping("/api/v2/orders")
     public List<OrderDto> ordersV2() {
-        return  orderRepository.findAllByString(new OrderSearch()).stream()
-                .map(OrderDto::new)
-                .collect(toList());
+        return orderQueryService.ordersV2();
+//        return  orderRepository.findAllByString(new OrderSearch()).stream()
+//                .map(OrderDto::new)
+//                .collect(toList());
     }
+
 
     @GetMapping("/api/v3/orders")
     public List<OrderDto> ordersV3() {
+        return orderQueryService.ordersV3(); // OSIV를 끈 상태에서의 지연로딩
         // 중복 데이터가 너무 많음. DB에서 application으로 전송되는 데이터 용량이 많아짐.
-        return  orderRepository.findAllWithItem().stream()
-                .map(OrderDto::new)
-                .collect(toList());
+//        return  orderRepository.findAllWithItem().stream()
+//                .map(OrderDto::new)
+//                .collect(toList());
     }
 
     @GetMapping("/api/v3.1/orders")
     public List<OrderDto> ordersV3_page(@RequestParam(value = "offset", defaultValue = "0") int offset,
                                         @RequestParam(value = "limit", defaultValue = "100") int limit) {
+        return orderQueryService.ordersV3_page(offset,limit);
         // 쿼리는 더 많이 나가지만 정규화된 상태로 중복 데이터가 없음.
-        return  orderRepository.findAllWithMemberDelivery(offset, limit).stream()
-                .map(OrderDto::new)
-                .collect(toList());
+//        return  orderRepository.findAllWithMemberDelivery(offset, limit).stream()
+//                .map(OrderDto::new)
+//                .collect(toList());
     }
 
     @GetMapping("/api/v4/orders")
@@ -100,42 +108,42 @@ public class OrderApiController {
 //    }
 
 
-    @Getter
-    static class OrderDto {
-        private Long orderId;
-        private String name;
-        private LocalDateTime orderDate;
-        private OrderStatus orderStatus;
-        private Address address;
-//        private List<OrderItem> orderItems; // Dto안에 Entity가 있어서는 안된다.
-        private List<OrderItemDto> orderItems;
-
-        public OrderDto(Order order) {
-            orderId = order.getId();
-            name = order.getMember().getName();
-            orderDate = order.getOrderDate();
-            orderStatus = order.getStatus();
-            address = order.getDelivery().getAddress();
-//            order.getOrderItems().stream().forEach(o -> o.getItem().getName()); // LAZY 강제 초기화
-//            orderItems = order.getOrderItems();
-            orderItems = order.getOrderItems()
-                    .stream()
-                    .map(OrderItemDto::new)
-                    .collect(toList());
-        }
-    }
-
-    @Getter
-    static class OrderItemDto {
-        private String itemName;
-        private int orderPrice;
-        private int count;
-
-        public OrderItemDto(OrderItem orderItem) {
-            itemName = orderItem.getItem().getName();
-            orderPrice = orderItem.getOrderPrice();
-            count = orderItem.getCount();
-        }
-    }
+//    @Getter
+//    static class OrderDto {
+//        private Long orderId;
+//        private String name;
+//        private LocalDateTime orderDate;
+//        private OrderStatus orderStatus;
+//        private Address address;
+////        private List<OrderItem> orderItems; // Dto안에 Entity가 있어서는 안된다.
+//        private List<OrderItemDto> orderItems;
+//
+//        public OrderDto(Order order) {
+//            orderId = order.getId();
+//            name = order.getMember().getName(); // order.getMember()는 아직 proxy 상태. LAZY 강제 초기화
+//            orderDate = order.getOrderDate();
+//            orderStatus = order.getStatus();
+//            address = order.getDelivery().getAddress();
+////            order.getOrderItems().stream().forEach(o -> o.getItem().getName()); // LAZY 강제 초기화
+////            orderItems = order.getOrderItems();
+//            orderItems = order.getOrderItems()
+//                    .stream()
+//                    .map(OrderItemDto::new)
+//                    .collect(toList());
+//        }
+//    }
+//
+//    @Getter
+//    static class OrderItemDto {
+//        private String itemName;
+//        private int orderPrice;
+//        private int count;
+//
+//        public OrderItemDto(OrderItem orderItem) {
+//            itemName = orderItem.getItem().getName();
+//            orderPrice = orderItem.getOrderPrice();
+//            count = orderItem.getCount();
+//        }
+//    }
 
 }
